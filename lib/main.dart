@@ -163,6 +163,33 @@ class _MyHomePageState extends State<MyHomePage> {
     ];
   }
 
+  Widget _buildCupertinoBar() {
+    return CupertinoNavigationBar(
+      middle: const Text("Expenses App"),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          GestureDetector(
+            child: const Icon(CupertinoIcons.add),
+            onTap: () => _startAddNewTransaction(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMaterialBar() {
+    return AppBar(
+      title: const Text("Expenses App"),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => _startAddNewTransaction(context),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     //creatina mediaQuery object we avoid the continues instanciation and improve the performance
@@ -170,28 +197,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final appBar;
     if (Platform.isIOS) {
-      appBar = CupertinoNavigationBar(
-        middle: const Text("Expenses App"),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            GestureDetector(
-              child: const Icon(CupertinoIcons.add),
-              onTap: () => _startAddNewTransaction(context),
-            ),
-          ],
-        ),
-      );
+      appBar = _buildCupertinoBar();
     } else {
-      appBar = AppBar(
-        title: const Text("Expenses App"),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _startAddNewTransaction(context),
-          ),
-        ],
-      );
+      appBar = _buildMaterialBar();
     }
     final txListWidget = Container(
       height: (mediaQuery.size.height -
