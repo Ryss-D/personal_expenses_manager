@@ -7,13 +7,17 @@ class AdaptiveElevatedButton extends StatelessWidget {
   final String text;
   final VoidCallback submitFunction;
 
-  AdaptiveElevatedButton({required this.text, required this.submitFunction});
+  const AdaptiveElevatedButton(
+      {required this.text, required this.submitFunction});
 
   @override
   Widget build(BuildContext context) {
     return Platform.isIOS
         ? CupertinoButton(
-            child: Text(text, style: Theme.of(context).textTheme.button),
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.button,
+            ),
             onPressed: submitFunction)
         : ElevatedButton(
             child: Text(

@@ -74,7 +74,7 @@ class _NewTransactionState extends State<NewTransaction> {
               // placeholder: 'Title',
               // ),
               TextField(
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 //onChanged: (value) {
                 //titleInput = value;
                 //},
@@ -82,12 +82,13 @@ class _NewTransactionState extends State<NewTransaction> {
                 onSubmitted: (_) => _submitData(),
               ),
               TextField(
-                decoration: InputDecoration(labelText: 'Amount'),
+                decoration: const InputDecoration(labelText: 'Amount'),
                 //onChanged: (value) {
                 //amountInput = value;
                 //},
                 controller: _amountController,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onSubmitted: (_) => _submitData(),
               ),
               Container(
@@ -101,9 +102,9 @@ class _NewTransactionState extends State<NewTransaction> {
                     ),
                     TextButton(
                       //style: color text purple,
-                      child: Text(
+                      child: const Text(
                         'Choose date',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                         ),
                       ),
