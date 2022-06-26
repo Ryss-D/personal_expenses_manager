@@ -30,13 +30,13 @@ class MyApp extends StatelessWidget {
       title: 'Expenses App',
       theme: ThemeData(
         textTheme: ThemeData.light().textTheme.copyWith(
-            headline6: TextStyle(
+            headline6: const TextStyle(
               fontFamily: 'Open Sans',
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-            button: TextStyle(color: Colors.white)),
-        appBarTheme: AppBarTheme(
+            button: const TextStyle(color: Colors.white)),
+        appBarTheme: const AppBarTheme(
           titleTextStyle: TextStyle(
               fontFamily: 'Open Sans',
               fontSize: 20,
@@ -76,7 +76,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return _userTransactions.where((tx) {
       return tx.date.isAfter(
         DateTime.now().subtract(
-          Duration(days: 7),
+          const Duration(days: 7),
         ),
       );
     }).toList();
@@ -115,6 +115,54 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Show chart',
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          //.adaptative allowus to adjutn the look based on the operating system we are running
+          Switch.adaptive(
+            activeColor: Theme.of(context).colorScheme.secondary,
+            value: _showChart,
+            onChanged: (val) {
+              setState(() {
+                _showChart = val;
+              });
+            },
+          ),
+        ],
+      ),
+      _showChart
+          ? Container(
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.65,
+              child: Chart(_recentTransactions),
+            )
+          : txListWidget,
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return [
+      Container(
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.35,
+        child: Chart(_recentTransactions),
+      ),
+      txListWidget,
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     //creatina mediaQuery object we avoid the continues instanciation and improve the performance
@@ -123,12 +171,12 @@ class _MyHomePageState extends State<MyHomePage> {
     final appBar;
     if (Platform.isIOS) {
       appBar = CupertinoNavigationBar(
-        middle: Text("Expenses App"),
+        middle: const Text("Expenses App"),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             GestureDetector(
-              child: Icon(CupertinoIcons.add),
+              child: const Icon(CupertinoIcons.add),
               onTap: () => _startAddNewTransaction(context),
             ),
           ],
@@ -136,10 +184,10 @@ class _MyHomePageState extends State<MyHomePage> {
       );
     } else {
       appBar = AppBar(
-        title: Text("Expenses App"),
+        title: const Text("Expenses App"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () => _startAddNewTransaction(context),
           ),
         ],
@@ -159,44 +207,11 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             if (isLandscape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Show chart',
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                  //.adaptative allowus to adjutn the look based on the operating system we are running
-                  Switch.adaptive(
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    value: _showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        _showChart = val;
-                      });
-                    },
-                  ),
-                ],
-              ),
+              ..._buildLandscapeContent(mediaQuery, appBar, txListWidget),
             if (!isLandscape)
-              Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.35,
-                child: Chart(_recentTransactions),
-              ),
-            if (!isLandscape) txListWidget,
-            if (isLandscape)
-              _showChart
-                  ? Container(
-                      height: (mediaQuery.size.height -
-                              appBar.preferredSize.height -
-                              mediaQuery.padding.top) *
-                          0.65,
-                      child: Chart(_recentTransactions),
-                    )
-                  : txListWidget,
+
+              /// what ... "spread operator" does its to unpack the existing elements of the sorrounding list and packed them as new elements of the main list
+              ..._buildPortraitContent(mediaQuery, appBar, txListWidget),
           ],
         ),
       ),
