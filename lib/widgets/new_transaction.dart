@@ -8,7 +8,7 @@ import 'package:personal_expenses_app/widgets/adaptive_elevated_button.dart';
 class NewTransaction extends StatefulWidget {
   final Function addTx;
 
-  NewTransaction(this.addTx);
+  const NewTransaction(this.addTx);
 
   @override
   State<NewTransaction> createState() => _NewTransactionState();
@@ -18,6 +18,28 @@ class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   late DateTime _selectedDate;
+
+  @override
+  void initState() {
+    // by default init state is called on State (the parent) but we can make our own initizalizacion too
+    // TODO: implement initState
+    //super keyword refers to methods and properties on parent
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(NewTransaction oldWidget) {
+    // TODO: implement didUpdateWidget
+    //give us the information about old widget, ieg we can compare the new and the old widgets
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    //its automatically called wihen a widget is destroyed but we can implemen by our own too
+    super.dispose();
+  }
 
   void _submitData() {
     if (_amountController.text.isEmpty) {

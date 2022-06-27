@@ -60,7 +60,7 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _userTransactions = [
     // Transaction(
     //     id: 't1', title: 'New Tshirt', amount: 9.9, date: DateTime.now()),
@@ -71,6 +71,24 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   bool _showChart = false;
+
+  @override
+  void initState() {
+    //we initializated the observer to lifeciclyles estate
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
+
+  @override
+  // life cycle state allowus to monitorize the state of app and react to dis (paused, suspended, resumed, etc)
+  didChangeLifecycleStata(AppLifecycleState state) {}
+
+  @override
+  dispose() {
+    // we have to ensure  remove observers on dispose to avoid memori leaks
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
   List<Transaction> get _recentTransactions {
     return _userTransactions.where((tx) {
