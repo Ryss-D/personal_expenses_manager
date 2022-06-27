@@ -8,6 +8,7 @@ class TransactionItem extends StatelessWidget {
     Key? key,
     required this.transaction,
     required this.deleteTx,
+    // this super(key:key) allowus to intanciate the parent class and pass data to it, in this case a key
   }) : super(key: key);
 
   final Transaction transaction;
